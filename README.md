@@ -1,7 +1,7 @@
 # CCC
 Custom Crowds in C++. Software designed to simulate dense crowds of a single species using the Vicsek model.
 
-##System Prerequisites
+## System Prerequisites
 Primarily designed for Ubuntu Linux however works on Windows via WSL and MacOS. Only tested using the g++ compiler. 
 
 To compile and use the program, the following must be installed:
@@ -16,5 +16,5 @@ libvtk6-dev
 ```
 Output .vtp visualisation files can be read using the ParaView software.
 
-##Running the program
+## Running the program
 To test run the program I suggest copying the contents of the TESTCASE folder to the same directory as the program and then running the RunMe bash script. An Experiment sub-folder will be created, with .vtp files stored within Experiment/VTP/
