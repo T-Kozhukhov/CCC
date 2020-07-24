@@ -1,3 +1,9 @@
+/*  TODO: Add headers to dump function
+    TODO: Take header titles as parameters for dumping function, add to function whenever it is used in this file
+    TODO: Make sure that loading function ignores headers
+    TODO: Test functionality of dumping functions for new headers
+*/
+
 #include "csv.h"
 
 #include <iostream>
