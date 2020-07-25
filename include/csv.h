@@ -31,7 +31,7 @@ class csv
         static std::vector<std::string> getLines(std::string path); //gets lines from the file at the specified full file path
         static std::vector<std::string> splitLine(std::string line);//splits a given line into it's component strings
 
-        static void makeCSV(std::vector<std::string> lines, std::string path);//make a CSV based on the lines at the specified full file path
+        static void makeCSV(std::vector<std::string> lines, std::string path, std::string header); //make a CSV based on the lines at the specified full file path
         static void appendCSV(std::vector<std::string> lines); //append information to the singleFile csv
 
         //importing physParam versions

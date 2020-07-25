@@ -1,6 +1,4 @@
-/*  TODO: Add headers to dump function
-    TODO: Take header titles as parameters for dumping function, add to function whenever it is used in this file
-    TODO: Make sure that loading function ignores headers
+/*  TODO: Take header titles as parameters for dumping function, add to function whenever it is used in this file
     TODO: Test functionality of dumping functions for new headers
 */
 
@@ -29,6 +27,9 @@ csv::~csv()
 void csv::setupSingleFile(std::string filePath){ //set single particle dump to be enabled and prepare the file for usage
     csv::singleFile.open(filePath+"ParticleData.csv", std::ios::out);
     csv::enableSinglePartFile = true;
+
+    //add headers to singlefile
+    csv::singleFile << "xPos,yPos,xVel,yVel,polAngle,polVel" << "\n"; 
 }
 
 std::vector<person> csv::importPList(std::string path){
@@ -143,7 +144,7 @@ void csv::exportPList(std::vector<person> pList, std::string pathOut, double avR
         lines.push_back(currLine); //push back the current line
     }
 
-    makeCSV(lines, pathOut); //finally, make a csv based on those lines at the specified full file path
+    makeCSV(lines, pathOut, "id,xPos,yPos,polAngle,xVel,yvel,rad,avRad,glued"); //finally, make a csv based on those lines at the specified full file path
 }
 
 void csv::exportPhysParam(physParam param, std::string path){
@@ -159,7 +160,7 @@ void csv::exportPhysParam(physParam param, std::string path){
     lines.push_back(csvLine); //make it the second line
 
     //finally, make a csv based on the generated lines:
-    makeCSV(lines, path+"PhysParamData.csv");
+    makeCSV(lines, path+"PhysParamData.csv"); //TODO: Add physparam parameter titles as argument here
 
     //now, save the data into a readable format
     makeReadablePhysParam(param, path+"ParameterList_Readable.txt");
@@ -190,7 +191,7 @@ void csv::dumpParticleData(std::vector<person> pList, std::string pathOut, doubl
     }
 
     //finally, make a CSV
-    makeCSV(lines, pathOut);
+    makeCSV(lines, pathOut, "xPos,yPos, xVel,yVel,polAngle,polVel");
 }
 
 void csv::dumpSingleParticleData(std::vector<person> pList, double currTime, int id){ //do a single particle data dump
@@ -232,6 +233,11 @@ std::vector<std::string> csv::getLines(std::string path){
     }
 
     fin.close(); //close the file
+
+    // first line will contain the headers, so we need to remove them
+    toReturn.erase(toReturn.begin()); //remove first element, which should contain the headers
+    // TODO: this is very dodgy! Test this properly in the output first!
+
     return toReturn; //return as necessary
 }
 
@@ -248,10 +254,14 @@ std::vector<std::string> csv::splitLine(std::string line){
     return toReturn;
 }
 
-void csv::makeCSV(std::vector<std::string> lines, std::string path){ //make a csv at the specified path with the included lines
+void csv::makeCSV(std::vector<std::string> lines, std::string path, std::string header){ //make a csv at the specified path with the included lines
     std::fstream fout; //file pointer
     fout.open(path, std::ios::out); //opens the file specified by the path in output mode
 
+    //first append the header string
+    fout << header << "\n";
+
+    //now append the remaining 
     for(unsigned int i = 0; i < lines.size(); i++){ //loop through the lines
         fout << lines.at(i) << "\n"; //add the lines to the file in this format
     }
