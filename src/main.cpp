@@ -1,3 +1,5 @@
+//  TODO: Write local testing script that clones github to a new temporary directory, compiles, and runs several test simulations
+
 #include <iostream>
 
 #include "System.h"
@@ -98,10 +100,9 @@ physParam rewriteParamForExperiment(physParam input, std::string expDirectory){
 int main(int argc, char* argv[])
 {
     std::cout   << '\n'
-                << "==========================\n"
-                << "|  Custom Crowds in C++  |\n"
-                << "|   13/10/2019 Release   |\n"
-                << "==========================\n\n";
+                << "================================\n"
+                << "|  Custom Crowds in C++ (CCC)  |\n"
+                << "================================\n\n";
 
     //get starting data depending on number of arguments
     physParam sysParam; // the actual physParam object which we use

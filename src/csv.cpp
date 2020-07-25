@@ -1,5 +1,4 @@
-/*  TODO: Take header titles as parameters for dumping function, add to function whenever it is used in this file
-    TODO: Test functionality of dumping functions for new headers
+/*  TODO: Test functionality of dumping functions for new headers after implementing pybind
 */
 
 #include "csv.h"
@@ -160,7 +159,8 @@ void csv::exportPhysParam(physParam param, std::string path){
     lines.push_back(csvLine); //make it the second line
 
     //finally, make a csv based on the generated lines:
-    makeCSV(lines, path+"PhysParamData.csv"); //TODO: Add physparam parameter titles as argument here
+    makeCSV(lines, path+"PhysParamData.csv",""); //NOTE: PHYSPARAMS DO NOT HAVE HEADERS!!! 
+                                                    // they have a blank space on line 1, preceding the version
 
     //now, save the data into a readable format
     makeReadablePhysParam(param, path+"ParameterList_Readable.txt");
@@ -191,7 +191,7 @@ void csv::dumpParticleData(std::vector<person> pList, std::string pathOut, doubl
     }
 
     //finally, make a CSV
-    makeCSV(lines, pathOut, "xPos,yPos, xVel,yVel,polAngle,polVel");
+    makeCSV(lines, pathOut, "xPos,yPos,xVel,yVel,polAngle,polVel");
 }
 
 void csv::dumpSingleParticleData(std::vector<person> pList, double currTime, int id){ //do a single particle data dump
@@ -236,7 +236,7 @@ std::vector<std::string> csv::getLines(std::string path){
 
     // first line will contain the headers, so we need to remove them
     toReturn.erase(toReturn.begin()); //remove first element, which should contain the headers
-    // TODO: this is very dodgy! Test this properly in the output first!
+    // TODO: this sounds dodgy! Test this properly by inspection!
 
     return toReturn; //return as necessary
 }
