@@ -95,26 +95,26 @@ physParam rewriteParamForExperiment(physParam input, std::string expDirectory){
     -loadParticles: load particle data from specified operand
     -v OR -verbose: set cmd output to verbose (more outputs!)
 */
-void performArgumentActions(std::string operator, std::string operand, physParam &param){
-    if(operator="-loadPhysParam"){ 
+void performArgumentActions(std::string argument, std::string operand, physParam &param){
+    if(argument=="-loadPhysParam"){ 
         cmdout::cmdWrite(false, "Importing parameters from " + operand);
         param = csv::importPhysParam(operand);
     } 
-    else if(operator="-expDir"){ 
+    else if(argument=="-expDir"){ 
         cmdout::cmdWrite(false, "Forcing experiment format. Experiment directory set to " + operand);
         param = rewriteParamForExperiment(param, operand);
    } 
-   else if(operator="-loadParticles"){ 
+   else if(argument=="-loadParticles"){ 
         cmdout::cmdWrite(false, "Forcing loading particles from " + operand);
         param.loadParticles = true;
         param.pathToParticles = operand;
     } 
-    else if(operator=="-v"||operator=="-verbose"){
+    else if(argument=="-v"||argument=="-verbose"){
         cmdout::setVerbose();
     }
     else {
         //make an error warning the user that the parameter wasn't understood
-        cmdout::cmdWrite(true, "Did not understand program argument " + operator + "="+operand);
+        cmdout::cmdWrite(true, "Did not understand program argument " + argument + "="+operand);
     }
 }
 
@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
     //TODO: Edit the above once I make the phys param handler class (to set up for pybind)
 
     //extract data from each argument. expect arguments in the form -OPERATOR=OPERAND
-    for(int i = 0; i<arc; i++){ //loop through the arguments
+    for(int i = 0; i<argc; i++){ //loop through the arguments
         std::string arg = argv[i]; //write curr argument as a string for simplicity
         
         //first split into operator and operand, code copied and edited from csv.cpp

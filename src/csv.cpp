@@ -109,7 +109,7 @@ physParam csv::importPhysParam(std::string path){
         break;
     }
 
-    cmdout::cmdWrite(true, "Loading of parameter data completed.";
+    cmdout::cmdWrite(true, "Loading of parameter data completed.");
     return toReturn;
 }
 
