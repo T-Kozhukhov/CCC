@@ -89,43 +89,59 @@ physParam rewriteParamForExperiment(physParam input, std::string expDirectory){
     return input;
 }
 
-/*
-    Program actions will depend on the number of arguments you give it.
-        No arguments - Create a sysParam based on the above hardcoded function
-        1 Argument - Load a sysParam from the first argument and run it entirely
-        2 Arguments - Load the sysParam specified in the first argument, then rewrite it using the "experiment" format with experiment directory as the second arguments
-        3 Arguments - As above, but load particles from the 3rd argument
+/* Perform actions depending on the arguments given to main. Argument list includes:
+    -loadPhysParam: load phys param csv file from specified operand
+    -expDir: force experiment directory to specified operand
+    -loadParticles: load particle data from specified operand
+    -v OR -verbose: set cmd output to verbose (more outputs!)
 */
+void performArgumentActions(std::string operator, std::string operand, physParam &param){
+    if(operator="-loadPhysParam"){ 
+        cmdout::cmdWrite(false, "Importing parameters from " + operand);
+        param = csv::importPhysParam(operand);
+    } 
+    else if(operator="-expDir"){ 
+        cmdout::cmdWrite(false, "Forcing experiment format. Experiment directory set to " + operand);
+        param = rewriteParamForExperiment(param, operand);
+   } 
+   else if(operator="-loadParticles"){ 
+        cmdout::cmdWrite(false, "Forcing loading particles from " + operand);
+        param.loadParticles = true;
+        param.pathToParticles = operand;
+    } 
+    else if(operator=="-v"||operator=="-verbose"){
+        cmdout::setVerbose();
+    }
+    else {
+        //make an error warning the user that the parameter wasn't understood
+        cmdout::cmdWrite(true, "Did not understand program argument " + operator + "="+operand);
+    }
+}
+
 int main(int argc, char* argv[])
 {
     cmdout::cmdWrite(true, "================================");
     cmdout::cmdWrite(true, "|  Custom Crowds in C++ (CCC)  |");
     cmdout::cmdWrite(true, "================================");
     cmdout::cmdWrite(true, " "); //newline for spacing
+ 
+    physParam sysParam = createPhysParam(); // set up phys param object in case we need it
+    //TODO: Edit the above once I make the phys param handler class (to set up for pybind)
 
-    //TODO: Extract whether to be verbose or not from parameters here. Potentially rework the way parameters work?
+    //extract data from each argument. expect arguments in the form -OPERATOR=OPERAND
+    for(int i = 0; i<arc; i++){ //loop through the arguments
+        std::string arg = argv[i]; //write curr argument as a string for simplicity
+        
+        //first split into operator and operand, code copied and edited from csv.cpp
+        std::stringstream s(arg); //making the stream which does the splitting based on the line
+        std::vector<std::string> argComponents;
+        std::string currWord; //the current word
 
-    //get starting data depending on number of arguments
-    physParam sysParam; // the actual physParam object which we use
-    if(argc>1){ //if we have some arguments, load physParam from specified file
-        std::string loadingPath(argv[1]); //get loading path from the first argument
-         cmdout::cmdWrite(false, "Importing parameters from " + loadingPath);
-        sysParam = csv::importPhysParam(loadingPath);
-
-        if(argc>2){ //if you have two arguments or more
-            std::string expDir(argv[2]);
-            cmdout::cmdWrite(false, "Forcing experiment format. Experiment directory set to " + expDir);
-            sysParam = rewriteParamForExperiment(sysParam, expDir);
-
-            if(argc>3){ //if you have three arguments or more, force loading particles from specified directory
-                std::string particlesDir(argv[3]);
-                cmdout::cmdWrite(false, "Forcing loading particles from " + particlesDir );
-                sysParam.loadParticles = true;
-                sysParam.pathToParticles = particlesDir;
-            }
+        while(std::getline(s, currWord, '=')){ //loop through every instance of "="
+            argComponents.push_back(currWord); //add each "word" to the toReturn vector
         }
-    } else { //if no parameters, load from hardcoded function
-        sysParam = createPhysParam();
+
+        performArgumentActions(argComponents[0], argComponents[1], sysParam); //pass operator then operand to the handling function
     }
 
     ///Uncomment below to force an experiment through hardcoding main

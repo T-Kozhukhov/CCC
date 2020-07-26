@@ -1,5 +1,4 @@
 // TODO: test functionality of this class
-// TODO: compile and fix errors as necessary
 
 #include "cmdout.h"
 
