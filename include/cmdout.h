@@ -20,6 +20,6 @@ class cmdout
     
     private:
         static bool verbose;
-}
+};
 
 #endif // CMDOUT_H
