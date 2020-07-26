@@ -1,7 +1,6 @@
 #include "force.h"
 
 #include <cmath>
-#include <iostream>
 
 force::force()
 {

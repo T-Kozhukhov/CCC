@@ -1,7 +1,7 @@
 #include "boundaryManager.h"
 
 #include <cmath>
-#include <iostream>
+#include "cmdout.h"
 
 boundaryManager::boundaryManager(){
     //dummy ctor
@@ -119,8 +119,8 @@ mathVector boundaryManager::getRandPos(RNG *randGen){ //get a random position wi
 
 mathVector boundaryManager::getRandPos(RNG *randGen, double xScale, double yScale){
     if(xScale>1||xScale<0||yScale>1||yScale<0){ //error catching
-        std::cout << "Error: Attempted to call boundaryManager::getRandPos(RNG*, double, double) with erronous parameters.\n"
-                  << "Ensure that the scalars are betwee 0 and 1. Returning a random position within the boundary instead.\n";
+        cmdout::cmdWrite(true, "Error: Attempted to call boundaryManager::getRandPos(RNG*, double, double) with erronous parameters.");
+        cmdout::cmdWrite(true, "Ensure that the scalars are betwee 0 and 1. Returning a random position within the boundary instead.");
         return getRandPos(randGen);
     }
 
@@ -142,13 +142,13 @@ mathVector boundaryManager::getRandPos(RNG *randGen, double edgeDist){
 
     //first, we'll do some simple error checking
     if(xMin>xMax){
-        std::cout << "Error: Attempted to call boundaryManager::getRandPos(RNG*, double) with too large an edge distance.\n"
-                  << "Either reduce the parameter, or increase L_x. Returning random position within the boundary instead.\n";
+        cmdout::cmdWrite(true, "Attempted to call boundaryManager::getRandPos(RNG*, double) with too large an edge distance.");
+        cmdout::cmdWrite(true, "Either reduce the parameter, or increase L_x. Returning random position within the boundary instead.");
         return getRandPos(randGen);
     }
     if(yMin>yMax){
-        std::cout << "Error: Attempted to call boundaryManager::getRandPos(RNG*, double) with too large an edge distance.\n"
-                  << "Either reduce the parameter, or increase L_y. Returning random position within the boundary instead.\n";
+        cmdout::cmdWrite(true, "Attempted to call boundaryManager::getRandPos(RNG*, double) with too large an edge distance.");
+        cmdout::cmdWrite(true, "Either reduce the parameter, or increase L_y. Returning random position within the boundary instead.");
         return getRandPos(randGen);
     }
 

@@ -1,7 +1,6 @@
-#include <iostream>
-
 #include "System.h"
 #include "csv.h"
+#include "cmdout.h"
 
 System::System(physParam param)
 {
@@ -35,19 +34,19 @@ System::~System()
 }
 
 void System::runSimulation(){
-    std::cout<< "Preparing simulation\n";
+    cmdout::cmdWrite(false, "Preparing simulation");
 
     initParticles(); //initialise particles
     csv::exportPList(personList, sysParam.pathToLoadingCSV+"initPartData.csv", sysParam.meanR); //exports the IC data for potential later usage
 
-    std::cout<< "Executing simulation\n";
+    cmdout::cmdWrite(false, "Executing simulation");
     simulationBegun = true; //set the simulation as begun to catch errors
 
     for(int t = 0; t<sysParam.stepMax; t++){ // perform appropriate number of steps
         step(t);
     }
 
-    cout<< "\n\nSimulation completed. Output at: " << vtpDumper.getPathInfo() << '\n';
+    cmdout::cmdWrite(true, "Simulation completed. Output at: " + vtpDumper.getPathInfo());
 }
 
 void System::initParticles(){
@@ -123,8 +122,8 @@ void System::mergePList(std::vector<person> newList){
 
 void System::mergePList(std::vector<person> *parentList, std::vector<person> newList){
     if(simulationBegun){ //if the simulation has already begun, throw some output and escape
-        std::cout << "Error: The program attempted to merge the pList after the simulation had already started.\n"
-                  << "Do all merging before starting the simulation 'step loop' begins. Merging was skipped.\n";
+        cmdout::cmdWrite(true, "Error: The program attempted to merge the pList after the simulation had already started.");
+        cmdout::cmdWrite(true, "Do all merging before starting the simulation 'step loop' begins. Merging was skipped.");
         return;
     }
 

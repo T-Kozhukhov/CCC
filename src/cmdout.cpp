@@ -1,5 +1,4 @@
 // TODO: test functionality of this class
-// TODO: remove all mentions of std::cout from the remainder of the code - It must go through this class!
 // TODO: compile and fix errors as necessary
 
 #include "cmdout.h"

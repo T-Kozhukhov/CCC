@@ -2,8 +2,8 @@
 */
 
 #include "csv.h"
+#include "cmdout.h"
 
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
@@ -81,35 +81,35 @@ physParam csv::importPhysParam(std::string path){
     physParam toReturn;
 
     //do some output
-    std::cout << "Beginning loading of parameters from "<< path << '\n';
+    cmdout::cmdWrite(true, "Beginning loading of parameters from " + path);
     //check version and call the appropriate function as necessary
     if(version==1){ //each block will process the file and return the appropriate physParam
         toReturn = extractPhysParamV1(lines);
     } else if (version == 2){
         toReturn = extractPhysParamV2(lines);
     } else {
-        std::cout << "Error: Cannot get version from physParam .csv at "<<path<<'\n'
-                  << "Program believes we are on version " << version << '\n'
-                  << "Returning a blank physParam object. Expect the program to fail.\n";
+        cmdout::cmdWrite(true, "Error: Cannot get version from physParam .csv at "+path);
+        cmdout::cmdWrite(true, "Program believes we are on PhysParam version " + version);
+        cmdout::cmdWrite(true, "Returning a blank physParam object. Expect the program to fail.");
         return physParam(); //return a blank physParam
     }
 
     //give an output notifying depreciation
     if(version!=currPhysParamVersion){
-        std::cout << "Warning - Parameter data file is of a depreciated version. The following parameters have been set to default values: \n";
+        cmdout::cmdWrite(true, "Warning - Parameter data file is of a depreciated version. The following parameters have been set to default values: ");
     }
     //Output new parameters as necessary and init them. If things were added in version N, put them into case N-1 below. Do not add breaks except in last case
     switch(version){
     case 1: //The following were added as of version 2, thus for version 1 physParams we need to deal with the following
-        std::cout << " (bool) dumpSingleParticle = false\n"; //output what is being defaulted and to what it is being defaulted
+        cmdout::cmdWrite(true, " (bool) dumpSingleParticle = false"); //output what is being defaulted and to what it is being defaulted
         toReturn.dumpSingleParticle = false; //set the variable to the default value
-        std::cout << " (double) massRadiusRatio = 1\n";
+        cmdout::cmdWrite(true, " (double) massRadiusRatio = 1");
         toReturn.massRadiusRatio = 1;
     case 2:
         break;
     }
 
-    std::cout << "Loading of parameter data completed.\n";
+    cmdout::cmdWrite(true, "Loading of parameter data completed.");
     return toReturn;
 }
 

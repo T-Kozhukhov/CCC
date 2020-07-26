@@ -16,7 +16,7 @@ class cmdout
 
         static void setVerbose(); //sets the flag for the cmd output to be verbose
 
-        static void cmdWrite(bool essential, std::string msg); //write message if essential or verbose output enabled
+        static void cmdWrite(bool essential, std::string msg); //write message on newline if essential or verbose output enabled
     
     private:
         static bool verbose;

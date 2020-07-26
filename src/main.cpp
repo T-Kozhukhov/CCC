@@ -1,7 +1,5 @@
 //  TODO: Write local testing script that clones github to a new temporary directory, compiles, and runs several test simulations
 
-#include <iostream>
-
 #include "System.h"
 #include "physParam.h"
 #include "csv.h"
@@ -99,26 +97,28 @@ physParam rewriteParamForExperiment(physParam input, std::string expDirectory){
 */
 int main(int argc, char* argv[])
 {
-    std::cout   << '\n'
-                << "================================\n"
-                << "|  Custom Crowds in C++ (CCC)  |\n"
-                << "================================\n\n";
+    cmdout::cmdWrite(true, "================================");
+    cmdout::cmdWrite(true, "|  Custom Crowds in C++ (CCC)  |");
+    cmdout::cmdWrite(true, "================================");
+    cmdout::cmdWrite(true, " "); //newline for spacing
+
+    //TODO: Extract whether to be verbose or not from parameters here. Potentially rework the way parameters work?
 
     //get starting data depending on number of arguments
     physParam sysParam; // the actual physParam object which we use
     if(argc>1){ //if we have some arguments, load physParam from specified file
         std::string loadingPath(argv[1]); //get loading path from the first argument
-        std::cout << "Importing parameters from " << loadingPath << '\n';
+         cmdout::cmdWrite(false, "Importing parameters from " + loadingPath);
         sysParam = csv::importPhysParam(loadingPath);
 
         if(argc>2){ //if you have two arguments or more
             std::string expDir(argv[2]);
-            std::cout << "Forcing experiment format. Experiment directory set to " << expDir << '\n';
+            cmdout::cmdWrite(false, "Forcing experiment format. Experiment directory set to " + expDir);
             sysParam = rewriteParamForExperiment(sysParam, expDir);
 
             if(argc>3){ //if you have three arguments or more, force loading particles from specified directory
                 std::string particlesDir(argv[3]);
-                std::cout << "Forcing loading particles from " << particlesDir << '\n';
+                cmdout::cmdWrite(false, "Forcing loading particles from " + particlesDir );
                 sysParam.loadParticles = true;
                 sysParam.pathToParticles = particlesDir;
             }

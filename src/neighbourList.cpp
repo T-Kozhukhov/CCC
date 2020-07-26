@@ -1,5 +1,4 @@
 #include "neighbourList.h"
-#include <iostream>
 
 //init of static members
 double neighbourList::r_m = 3; //default values, assuming average radius is 1

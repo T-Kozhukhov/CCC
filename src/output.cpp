@@ -1,6 +1,7 @@
 #include "output.h"
+
+#include "cmdout.h"
 #include <sstream>
-#include <iostream>
 
 output::output(){
     //empty ctor
@@ -44,7 +45,7 @@ void output::dump(int tStep){
     writer->SetDataModeToAscii();
     writer->Write();
 
-    std::cout << "Stored data to: " << fullFilePath << std::endl;
+     cmdout::cmdWrite(false, "Stored data to: " + fullFilePath );
 }
 
 std::string output::getPathInfo(){
